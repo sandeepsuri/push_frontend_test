@@ -2,12 +2,10 @@ import {React, useState} from "react";
 import '../App.css'
 import data from '../employee_data.json'
 
-
-
 const Dashboard = () => {
     const employeeInfo = data.map(employee => ({
         id: employee.employee_id,
-        name: employee.first_name + ' ' + employee.last_name,
+        name: employee.first_name + ' ' + (employee.last_name === null ? '' : employee.last_name),
         totalHours: employee.labour.reduce((sum, hour) => sum + hour.total, 0) //where sum starts at 0 per user
     }))
 
@@ -24,35 +22,32 @@ const Dashboard = () => {
         setFilterItems(filter)
     }
 
- 
-
     return(
         <div className='w-full'>
-          <div className='flex p-8'>
-            <input 
-                className="w-2/3 px-4 py-2 border" 
-                placeholder="Filter employees by name" 
-                type="text"
-                value={search}
-                onChange={handleSearch}
-            />
-          </div>
-          <div className="w-2/3 p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-
-            {
-                filteredItems.map((employee) => (
-                    <div key={employee.id} className="bg-white rounded shadow p-4 flex justify-between items-center">
-                        <div>
-                            <div className="font-extrabold text-lg">{employee.name}</div>
-                            <div className="text-gray-600 font-bold">Total hours</div>
+            <div className='p-8 sm:flex lg:grid lg:grid-cols-1'>
+                <input 
+                    className="sm:w-full lg:w-1/2 px-4 py-2 border" 
+                    placeholder="Filter employees by name" 
+                    type="text"
+                    value={search}
+                    onChange={handleSearch}
+                />
+            </div>
+ 
+            <div className="p-8 grid sm:justify-center sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-2 text-[#0D325F]">
+                {
+                    filteredItems.map((employee) => (
+                        <div key={employee.id} className="bg-white border p-4 flex justify-between">
+                            <div>
+                                <div className="sm:font-bold lg:font-extrabold sm:text-sm lg:text-lg">{employee.name}</div>
+                                <div className="font-semibold sm:text-sm lg:text-base">Total hours</div>
+                            </div>
+                            
+                            <div className="sm:font-light sm:text-sm lg:font-semibold pt-7">{employee.totalHours}</div>
                         </div>
-                        
-                        <div className="text-gray-800 font-semibold pt-7">{employee.totalHours}</div>
-                    </div>
-                ))
-            }
-            
-          </div>
+                    ))
+                }
+            </div>
         </div>
     )
 }
